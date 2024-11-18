@@ -1,72 +1,48 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_REGISTRY = "localhost:5001"    // Adresse du registre Docker local
-        IMAGE_NAME = "calculatric"           // Nom de l'image Docker
-        IMAGE_TAG = "latest"                 // Tag de l'image Docker
-        APP_PORT = "8888"                    // Port utilisé par l'application à l'intérieur du conteneur
-        EXPOSED_PORT = "8882"                // Port exposé sur la machine hôte
-    }
+
     stages {
-        stage('Checkout Code') {
+        stage("Package") {
             steps {
-                echo "Récupération du code source depuis le dépôt Git."
-                checkout scm // Vérifie automatiquement le code depuis le dépôt configuré
+                sh "./gradlew build"
             }
         }
 
-        stage('Build Docker Image') {
+        stage("Docker Build") {
             steps {
-                echo "Construction de l'image Docker."
-                sh """
-                    docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} .
-                """
+                sh "docker build -t localhost:5000/calculatrice ."
             }
         }
 
-        stage('Push Docker Image') {
+        stage("Docker Push") {
             steps {
-                echo "Envoi de l'image Docker vers le registre local."
-                sh """
-                    docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
-                """
+                sh "docker push localhost:5000/calculatrice"
             }
         }
 
-        stage('Déploiement sur Staging') {
+        stage("Deploy to Staging (Préproduction)") {
             steps {
-                echo "Déploiement de l'application sur l'environnement de staging."
-                sh """
-                    docker stop calculatric || true
-                    docker rm calculatric || true
-                    docker run -d --name calculatric -p ${EXPOSED_PORT}:${APP_PORT} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
-                """
+                // Supprime le conteneur en cours, si existant
+                sh "docker rm -f calculatrice || true"
+                // Lancement du conteneur en mode détaché
+                sh "docker run -d --rm -p 8882:8888 --name calculatrice localhost:5000/calculatrice"
             }
         }
 
-        stage('Test d\'acceptation') {
+        stage("Acceptance Test") {
             steps {
-                echo "Exécution des tests d'acceptation."
-                sh """
-                    ./gradlew acceptanceTest -Dcalculatric.url=http://localhost:${EXPOSED_PORT}
-                """
+                // Attente pour garantir que le service est bien démarré
+                sleep 60
+                // Lancement des tests d'acceptation
+                sh "./gradlew acceptanceTest -Dcalculatrice.url=http://localhost:8765"
             }
         }
     }
 
     post {
         always {
-            echo "Nettoyage des ressources après le pipeline."
-            sh """
-                docker stop calculatric || true
-                docker rm calculatric || true
-            """
-        }
-        success {
-            echo "Pipeline terminé avec succès."
-        }
-        failure {
-            echo "Échec du pipeline. Consultez les journaux pour résoudre les problèmes."
+            // Arrêt du conteneur, peu importe le résultat des étapes précédentes
+            sh "docker stop calculatrice"
         }
     }
 }
