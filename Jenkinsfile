@@ -34,7 +34,7 @@ pipeline {
                 // Attente pour garantir que le service est bien démarré
                 sleep 60
                 // Lancement des tests d'acceptation
-                sh "./gradlew acceptanceTest -Dcalculatrice.url=http://localhost:8765"
+                sh "./gradlew acceptanceTest -Dcalculatrice.url=http://localhost:8882"
             }
         }
     }
