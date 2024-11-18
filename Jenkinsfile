@@ -5,10 +5,15 @@ pipeline {
         IMAGE_NAME = "calculatric"           // Nom de l'image Docker
         IMAGE_TAG = "latest"                 // Tag de l'image Docker
         APP_PORT = "8888"                    // Port utilisé par l'application à l'intérieur du conteneur
-        EXPOSED_PORT = "8881"                // Port exposé sur la machine hôte
+        EXPOSED_PORT = "8882"                // Port exposé sur la machine hôte
     }
     stages {
-        
+        stage('Checkout Code') {
+            steps {
+                echo "Récupération du code source depuis le dépôt Git."
+                checkout scm // Vérifie automatiquement le code depuis le dépôt configuré
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
