@@ -31,7 +31,8 @@ pipeline {
 
         stage("Test d\'acceptation") {
             steps {
-                 echo "Construction de l'image Docker."
+
+ 		 sh "chmod +x acceptance_test.sh && ./acceptance_test.sh"
             }
         }
     }
