@@ -33,7 +33,7 @@ pipeline {
             steps {
                 echo "Exécution des tests d'acceptation."
                 sh """
-                    ./gradlew acceptanceTest -Dcalculatric.url=http://localhost:8881
+                    ./gradlew acceptanceTest -Dcalculatric.url=http://localhost:8882
                 """
             }
         }
