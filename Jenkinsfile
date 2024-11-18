@@ -8,12 +8,7 @@ pipeline {
         EXPOSED_PORT = "8881"                // Port exposé sur la machine hôte
     }
     stages {
-        stage('Checkout Code') {
-            steps {
-                echo "Récupération du code source depuis le dépôt Git."
-                checkout scm // Vérifie automatiquement le code depuis le dépôt configuré
-            }
-        }
+        
 
         stage('Build Docker Image') {
             steps {
