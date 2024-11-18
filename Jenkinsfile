@@ -1,11 +1,11 @@
 pipeline {
     agent any
     environment {
-        DOCKER_REGISTRY = "localhost:5001"    // Adresse du registre Docker local
+        DOCKER_REGISTRY = "localhost:5000"    // Adresse du registre Docker local
         IMAGE_NAME = "calculatric"           // Nom de l'image Docker
         IMAGE_TAG = "latest"                 // Tag de l'image Docker
-        APP_PORT = "8081"                    // Port utilisé par l'application à l'intérieur du conteneur
-        EXPOSED_PORT = "9092"                // Port exposé sur la machine hôte
+        APP_PORT = "8888"                    // Port utilisé par l'application à l'intérieur du conteneur
+        EXPOSED_PORT = "8881"                // Port exposé sur la machine hôte
     }
     stages {
         stage('Checkout Code') {
