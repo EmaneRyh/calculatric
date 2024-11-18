@@ -29,12 +29,12 @@ pipeline {
             }
         }
 
-        stage("Acceptance Test") {
+        stage('Test d\'acceptation') {
             steps {
-                // Attente pour garantir que le service est bien démarré
-                sleep 60
-                // Lancement des tests d'acceptation
-                sh "./gradlew acceptanceTest -Dcalculatrice.url=http://localhost:8882"
+                echo "Exécution des tests d'acceptation."
+                sh """
+                    ./gradlew acceptanceTest -Dcalculatric.url=http://localhost:8881
+                """
             }
         }
     }
