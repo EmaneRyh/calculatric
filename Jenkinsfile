@@ -37,11 +37,6 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            // Arrêt du conteneur, peu importe le résultat des étapes précédentes
-            sh "docker stop calculatrice"
-        }
-    }
+    
 }
 
