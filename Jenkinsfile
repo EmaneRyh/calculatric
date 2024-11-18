@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage("Package") {
+        stage('Checkout Code') {
             steps {
-                sh "./gradlew build"
+                echo "Récupération du code source depuis le dépôt Git."
+                checkout scm // Vérifie automatiquement le code depuis le dépôt configuré
             }
         }
 
