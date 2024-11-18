@@ -25,7 +25,7 @@ pipeline {
                 // Supprime le conteneur en cours, si existant
                 sh "docker rm -f calculatrice || true"
                 // Lancement du conteneur en mode détaché
-                sh "docker run -d --rm -p 8881:8888 --name calculatrice localhost:5000/calculatrice"
+                sh "docker run -d --rm -p 8882:8888 --name calculatrice localhost:5000/calculatrice"
             }
         }
 
