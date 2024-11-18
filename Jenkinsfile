@@ -31,10 +31,8 @@ pipeline {
 
         stage('Test d\'acceptation') {
             steps {
-                echo "Exécution des tests d'acceptation."
-                sh """
-                    ./gradlew acceptanceTest -Dcalculatric.url=http://localhost:8882
-                """
+                 sleep 60
+ 		 sh "chmod +x acceptance_test.sh && ./acceptance_test.sh"
             }
         }
     }
